@@ -52,7 +52,8 @@
     solution("input.txt");
     ```
 
-  ## Code Breakdown
+
+## Code Breakdown
 
   ### 1. Initial Setup
     - Imports the Node.js `fs` module for file operations
