@@ -3,9 +3,9 @@
 <details>
 <summary>Day 1 solution</summary>
 <br>
-    # Day 1: first part
+# Part one
 
-    ```javascript
+  ```javascript
     const fs = require("fs");
 
     const solution = (input) => {
@@ -52,9 +52,9 @@
     solution("input.txt");
     ```
 
-    ## Code Breakdown
+  ## Code Breakdown
 
-    ### 1. Initial Setup
+  ### 1. Initial Setup
     - Imports the Node.js `fs` module for file operations
     - Declares arrays for storing:
       - `left` numbers
@@ -62,8 +62,8 @@
       - `differences` between paired numbers
     - Initializes `sum` variable to 0
 
-    ### 2. File Reading
-    ```javascript
+  ### 2. File Reading
+  ```javascript
     fs.readFile(input, "utf8", (err, data) => {
       // ... code continues
     });
@@ -71,53 +71,53 @@
     - Reads input file asynchronously
     - Handles potential errors in file reading
 
-    ### 3. Data Processing
+  ### 3. Data Processing
     - Splits input data into lines
     - For each line:
       - Splits into two numbers
       - Stores first number in `left` array
       - Stores second number in `right` array
 
-    ### 4. Array Sorting
+  ### 4. Array Sorting
     ```javascript
     left.sort((a, b) => a - b);
     right.sort((a, b) => a - b);
     ```
     - Both arrays are sorted in ascending order
 
-    ### 5. Calculating Differences
+  ### 5. Calculating Differences
     - Calculates absolute difference between corresponding elements
     - Stores differences in `differences` array
     - Sums up all differences
 
-    ## Example
+  ## Example
 
-    Given input.txt:
-    ```
+  Given input.txt:
+  ```
     1 4
     3 1
     2 2
-    ```
+  ```
 
-    ### Process:
-    1. **Initial Arrays:**
+  ### Process:
+  1. **Initial Arrays:**
        - left: [1, 3, 2]
        - right: [4, 1, 2]
 
-    2. **After Sorting:**
+   2. **After Sorting:**
        - left: [1, 2, 3]
        - right: [1, 2, 4]
 
-    3. **Differences:**
+  3. **Differences:**
        - |1-1| = 0
        - |2-2| = 0
        - |3-4| = 1
 
-    4. **Final Sum:** 0 + 0 + 1 = 1
+  4. **Final Sum:** 0 + 0 + 1 = 1
 
-  # Day 1: second part
 
-   # Code Explanation in Markdown
+
+   # Part two
 
    ```javascript
    const fs = require("fs");
