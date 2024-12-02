@@ -3,6 +3,8 @@
 This repository contains my solutions for the Advent of Code 2024 challenges. The solutions are written in JavaScript and are organized by day and part.
 The solutions are made by me and may not be the most optimal or efficient solutions, but they work ;)))
 
+Link to the Advent of Code website where you can find the puzzles: [Advent of Code](https://adventofcode.com/)
+
 <details>
 <summary>Day 1 solution</summary>
 <br>
