@@ -1,5 +1,8 @@
 # Advent of Code 2024
 
+This repository contains my solutions for the Advent of Code 2024 challenges. The solutions are written in JavaScript and are organized by day and part.
+The solutions are made by me and may not be the most optimal or efficient solutions, but they work ;)))
+
 <details>
 <summary>Day 1 solution</summary>
 <br>
