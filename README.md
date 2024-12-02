@@ -2,7 +2,7 @@
 
 <details>
 <summary>Day 1 solution</summary>
-<br>
+
 # Part one
 
   ```javascript
