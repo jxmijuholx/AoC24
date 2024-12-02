@@ -175,3 +175,207 @@ The final similarity score is then printed to the console.
 
 </details>
 </details>
+
+
+<details>
+<summary>Day 2 solution</summary>
+<br>
+<details>
+<summary>Part 1</summary>
+<br>
+
+# Code
+```javascript
+const fs = require("fs");
+
+function isSafe(levels) {
+  const nums = levels.split(" ").map(Number);
+
+  const differences = [];
+  for (let i = 0; i < nums.length - 1; i++) {
+    differences.push(nums[i + 1] - nums[i]);
+  }
+
+  let allIncreasing = true;
+  let allDecreasing = true;
+  for (const diff of differences) {
+    if (diff <= 0) {
+      allIncreasing = false;
+    }
+    if (diff >= 0) {
+      allDecreasing = false;
+    }
+  }
+
+  if (!allIncreasing && !allDecreasing) {
+    return false;
+  }
+
+  for (const diff of differences) {
+    if (Math.abs(diff) < 1 || Math.abs(diff) > 3) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function countSafeReports(filename) {
+  const data = fs.readFileSync(filename, "utf8");
+
+  const levels = data.trim().split("\n");
+
+  let safeCount = 0;
+  for (const level of levels) {
+    if (isSafe(level.trim())) {
+      safeCount++;
+    }
+  }
+  return safeCount;
+}
+
+console.log(countSafeReports("input2.txt"));
+
+```
+
+# What it does
+
+The code reads the input file and checks if the levels are safe.
+The levels are considered safe if they meet the following criteria:
+- The differences between the levels are either increasing or decreasing.
+- The differences between the levels are between 1 and 3.
+The code counts the number of safe reports and prints the count to the console.
+
+## How the code works
+
+1. Read the input file
+- The function uses the Node.js fs module to read the file at the specified input path.
+- It reads the file synchronously and splits the contents into lines for processing.
+
+2. Check if the levels are safe
+- The function isSafe takes a string of levels as input and checks if the levels are safe.
+- It splits the levels into numbers and calculates the differences between adjacent levels.
+- It checks if the differences are either all increasing or all decreasing.
+- It also checks if the differences are between 1 and 3.
+- If the levels meet all the criteria, the function returns true; otherwise, it returns false.
+
+3. Count the number of safe reports
+- The function countSafeReports reads the levels from the input file and counts the number of safe reports.
+- It iterates through each level, checks if it is safe using the isSafe function, and increments the safeCount if the level is safe.
+
+4. Print the result
+- The final count of safe reports is printed to the console.
+
+</details>
+
+<details>
+<summary>Part 2</summary>
+
+# Code
+```javascript
+const fs = require("fs");
+
+function isSafe(levels) {
+  const nums = levels.split(" ").map(Number);
+
+  const differences = [];
+  for (let i = 0; i < nums.length - 1; i++) {
+    differences.push(nums[i + 1] - nums[i]);
+  }
+
+  let allIncreasing = true;
+  let allDecreasing = true;
+  for (const diff of differences) {
+    if (diff <= 0) {
+      allIncreasing = false;
+    }
+    if (diff >= 0) {
+      allDecreasing = false;
+    }
+  }
+
+  if (!allIncreasing && !allDecreasing) {
+    return false;
+  }
+
+  for (const diff of differences) {
+    if (Math.abs(diff) < 1 || Math.abs(diff) > 3) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function isSafeWithDampener(levels) {
+  const nums = levels.split(" ").map(Number);
+
+  for (i = 0; i < nums.length; i++) {
+    let newLevels = "";
+    for (let j = 0; j < nums.length; j++) {
+      if (j !== i) {
+        newLevels += nums[j] + " ";
+      }
+    }
+
+    if (isSafe(newLevels.trim())) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function countSafeReportsWithDampener(filename) {
+  const data = fs.readFileSync(filename, "utf8");
+  const lines = data.trim().split("\n");
+
+  let safeCount = 0;
+
+  for (const line of lines) {
+    if (isSafeWithDampener(line.trim())) {
+      safeCount++;
+    }
+  }
+  return safeCount;
+}
+
+console.log(countSafeReportsWithDampener("input2.txt"));
+
+```
+
+# What it does
+
+The code reads the input file and checks if the levels are safe with a dampener.
+The levels are considered safe with a dampener if they meet the following criteria:
+- The differences between the levels are either increasing or decreasing.
+- The differences between the levels are between 1 and 3.
+- If a single level is removed, the remaining levels are still safe.
+The code counts the number of safe reports with a dampener and prints the count to the console.
+
+## How the code works
+
+1. Read the input file
+- The function uses the Node.js fs module to read the file at the specified input path.
+- It reads the file synchronously and splits the contents into lines for processing.
+
+2. Check if the levels are safe
+- The function isSafe takes a string of levels as input and checks if the levels are safe.
+- It splits the levels into numbers and calculates the differences between adjacent levels.
+- It checks if the differences are either all increasing or all decreasing.
+- It also checks if the differences are between 1 and 3.
+- If the levels meet all the criteria, the function returns true; otherwise, it returns false.
+
+3. Check if the levels are safe with a dampener
+- The function isSafeWithDampener takes a string of levels as input and checks if the levels are safe with a dampener.
+- It removes one level at a time and checks if the remaining levels are safe using the isSafe function.
+- If the remaining levels are safe after removing a single level, the function returns true; otherwise, it returns false.
+
+4. Count the number of safe reports with a dampener
+- The function countSafeReportsWithDampener reads the levels from the input file and counts the number of safe reports with a dampener.
+- It iterates through each level, checks if it is safe with a dampener using the isSafeWithDampener function, and increments the safeCount if the level is safe with a dampener.
+
+5. Print the result
+- The final count of safe reports with a dampener is printed to the console.
+
+</details>
+</details>
