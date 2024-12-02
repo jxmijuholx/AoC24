@@ -1,2 +1,7 @@
-# AoC24
-Advent of Code 2024
+# Advent of Code 2024
+
+<details>
+<summary>Day 1 solution</summary>
+<br>
+
+</details>
