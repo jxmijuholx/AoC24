@@ -384,3 +384,133 @@ The code counts the number of safe reports with a dampener and prints the count 
 
 </details>
 </details>
+
+<details>
+<summary>Day 3 solution</summary>
+<br>
+<details>
+<summary>Part 1</summary>
+<br>
+
+# Code
+```javascript
+const fs = require("fs");
+
+const data = fs.readFileSync("input3.txt", "utf8");
+
+const regex = /mul\((\d{1,3}),(\d{1,3})\)/g;
+
+const matches = data.match(regex);
+
+console.log(matches);
+
+function calculation(matches) {
+  let sum = 0;
+  matches.forEach((match) => {
+    const numbers = match.match(/\d{1,3}/g);
+    sum += numbers[0] * numbers[1];
+  });
+  return sum;
+}
+
+console.log(calculation(matches));
+```
+
+# What it does
+
+The code reads the input file and processes multiplication expressions in the format `mul(x,y)`.
+It extracts all such expressions from the input file and calculates the sum of all multiplications.
+
+## How the code works
+
+1. Read the input file
+- The code uses the Node.js fs module to read the file synchronously.
+- It reads the entire file content as a UTF-8 encoded string.
+
+2. Define the regular expression
+- A regular expression is defined to match patterns in the format `mul(x,y)`.
+- The regex `/mul\((\d{1,3}),(\d{1,3})\)/g` matches:
+  - `mul` literally
+  - Numbers between 1-3 digits inside parentheses
+  - Separated by a comma
+  - The 'g' flag makes it match all occurrences
+
+3. Extract matches
+- The `data.match(regex)` extracts all matching patterns from the input text.
+- Stores these matches in an array.
+
+4. Calculate the sum
+- The `calculation` function processes each matched expression:
+  - Extracts the numbers from each match
+  - Multiplies them together
+  - Adds the result to a running sum
+- Returns the final sum of all multiplications
+
+5. Print results
+- The matched expressions and final sum are printed to the console.
+
+</details>
+
+<details>
+<summary>Part 2</summary>
+
+# Code
+```javascript
+const fs = require("fs");
+
+const data = fs.readFileSync("input3.txt", "utf8");
+
+const regex = /(?:do\(\)|don't\(\)|mul\((\d{1,3}),(\d{1,3})\))/g;
+
+let mulEnabled = true;
+let sum = 0;
+
+while ((match = regex.exec(data)) !== null) {
+  if (match[0] === "do()") {
+    mulEnabled = true;
+  } else if (match[0] === "don't()") {
+    mulEnabled = false;
+  } else if (mulEnabled) {
+    sum += parseInt(match[1]) * parseInt(match[2]);
+  }
+}
+
+console.log(sum);
+```
+
+# What it does
+
+The code reads the input file and processes multiplication expressions along with control commands (`do()` and `don't()`).
+It only performs multiplications when they are enabled by the control commands and calculates the sum of allowed multiplications.
+
+## How the code works
+
+1. Read the input file
+- The code uses the Node.js fs module to read the file synchronously.
+- It reads the entire file content as a UTF-8 encoded string.
+
+2. Define the enhanced regular expression
+- A more complex regex is used to match three types of patterns:
+  - `do()`
+  - `don't()`
+  - `mul(x,y)` where x and y are 1-3 digit numbers
+- The regex uses non-capturing groups `(?:...)` to match all pattern types
+
+3. Process the commands sequentially
+- Uses `regex.exec()` in a while loop to process matches one at a time
+- Maintains a `mulEnabled` flag to track whether multiplications should be performed
+- For each match:
+  - If it's `do()`, enables multiplications
+  - If it's `don't()`, disables multiplications
+  - If it's a multiplication and multiplications are enabled, performs the calculation
+
+4. Calculate controlled sum
+- Only adds multiplication results to the sum when `mulEnabled` is true
+- Uses `parseInt()` to convert matched strings to numbers
+- Multiplies the numbers and adds to running sum
+
+5. Print result
+- The final sum of all enabled multiplications is printed to the console
+
+</details>
+</details>
