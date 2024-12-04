@@ -514,3 +514,359 @@ It only performs multiplications when they are enabled by the control commands a
 
 </details>
 </details>
+<details>
+<summary>Day 4 solution</summary>
+<br>
+<details>
+<summary>Part 1</summary>
+<br>
+
+# Code
+```javascript
+const fs = require("fs");
+
+function XMAS(input) {
+  const haystack = fs
+    .readFileSync(input, "utf-8")
+    .trim()
+    .split("\n")
+    .map((line) => line.trim());
+
+  const rows = haystack.length;
+  const cols = haystack[0].length;
+  const needle = "XMAS";
+  const needle_len = needle.length;
+
+  function right(x, y) {
+    if (y + needle_len > cols) {
+      return false;
+    }
+    for (let i = 0; i < needle_len; i++) {
+      if (haystack[x][y + i] !== needle[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function left(x, y) {
+    if (y - needle_len + 1 < 0) {
+      return false;
+    }
+    for (let i = 0; i < needle_len; i++) {
+      if (haystack[x][y - i] !== needle[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function down(x, y) {
+    if (x + needle_len > rows) {
+      return false;
+    }
+    for (let i = 0; i < needle_len; i++) {
+      if (haystack[x + i][y] !== needle[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function up(x, y) {
+    if (x - needle_len + 1 < 0) {
+      return false;
+    }
+    for (let i = 0; i < needle_len; i++) {
+      if (haystack[x - i][y] !== needle[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function down_right(x, y) {
+    if (x + needle_len > rows || y + needle_len > cols) {
+      return false;
+    }
+    for (let i = 0; i < needle_len; i++) {
+      if (haystack[x + i][y + i] !== needle[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function down_left(x, y) {
+    if (x + needle_len > rows || y - needle_len + 1 < 0) {
+      return false;
+    }
+    for (let i = 0; i < needle_len; i++) {
+      if (haystack[x + i][y - i] !== needle[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function up_right(x, y) {
+    if (x - needle_len + 1 < 0 || y + needle_len > cols) {
+      return false;
+    }
+    for (let i = 0; i < needle_len; i++) {
+      if (haystack[x - i][y + i] !== needle[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function up_left(x, y) {
+    if (x - needle_len + 1 < 0 || y - needle_len + 1 < 0) {
+      return false;
+    }
+    for (let i = 0; i < needle_len; i++) {
+      if (haystack[x - i][y - i] !== needle[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  let count = 0;
+  for (let x = 0; x < rows; x++) {
+    for (let y = 0; y < cols; y++) {
+      if (haystack[x][y] === "X") {
+        if (right(x, y)) count++;
+        if (left(x, y)) count++;
+        if (down(x, y)) count++;
+        if (up(x, y)) count++;
+        if (down_right(x, y)) count++;
+        if (down_left(x, y)) count++;
+        if (up_right(x, y)) count++;
+        if (up_left(x, y)) count++;
+      }
+    }
+  }
+  return count;
+}
+
+const input = "input4.txt";
+console.log(XMAS(input));
+
+```
+
+# What it does
+
+This code solves a word search puzzle looking for the word "XMAS" in a grid of letters. It searches in 8 different directions:
+- Right (→)
+- Left (←)
+- Down (↓)
+- Up (↑)
+- Down-right (↘)
+- Down-left (↙)
+- Up-right (↗)
+- Up-left (↖)
+
+The code counts how many times "XMAS" appears in all these directions throughout the grid.
+
+## How the code works
+
+1. Read and Process Input
+- Uses `fs.readFileSync` to read the input file
+- Splits the input into lines and trims whitespace
+- Creates a grid where `rows` = number of lines and `cols` = length of each line
+
+2. Direction Check Functions
+The code has 8 functions to check for "XMAS" in different directions:
+
+`right(x, y)`:
+- Checks if "XMAS" appears to the right of position (x,y)
+- First verifies there's enough space to the right
+- Compares each character with the expected letter
+
+`left(x, y)`:
+- Similar to right, but checks leftward
+- Verifies enough space exists to the left
+- Checks characters in reverse
+
+`down(x, y)`:
+- Checks downward from position
+- Verifies enough rows below
+- Compares characters vertically down
+
+`up(x, y)`:
+- Checks upward from position
+- Verifies enough rows above
+- Compares characters vertically up
+
+`down_right(x, y)`:
+- Checks diagonally down-right
+- Verifies space in both directions
+- Compares characters diagonally
+
+`down_left(x, y)`, `up_right(x, y)`, `up_left(x, y)`:
+- Check remaining diagonal directions
+- Each verifies appropriate space exists
+- Compare characters along their respective diagonals
+
+3. Main Search Logic
+- Iterates through every position in the grid
+- When it finds an 'X', checks all 8 directions
+- Increments counter for each successful find
+- Returns total count of "XMAS" occurrences
+
+4. Boundary Checking
+- Each direction function first checks if the word would fit within grid boundaries
+- Prevents array index out of bounds errors
+- Only proceeds with character checking if boundaries are valid
+
+5. Character Matching
+- Compares each character in the pattern "XMAS"
+- Returns false immediately if any character doesn't match
+- Returns true only if all characters match in sequence
+
+
+### Detailed Direction Check Explanations
+
+1. **Right Check (→)**
+```javascript
+function right(x, y) {
+    if (y + needle_len > cols) {  // Boundary check
+        return false;
+    }
+    for (let i = 0; i < needle_len; i++) {
+        if (haystack[x][y + i] !== needle[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+```
+Visual Example:
+```
+Grid Position:      For "XMAS", checking right:
+[X][M][A][S][R]    Position (0,0)
+[T][T][T][T][T]    Checks: (0,0)=X, (0,1)=M, (0,2)=A, (0,3)=S
+```
+
+2. **Left Check (←)**
+```javascript
+function left(x, y) {
+    if (y - needle_len + 1 < 0) {  // Boundary check
+        return false;
+    }
+    for (let i = 0; i < needle_len; i++) {
+        if (haystack[x][y - i] !== needle[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+```
+Visual Example:
+```
+Grid Position:      For "XMAS", checking left:
+[R][S][A][M][X]    Position (0,4)
+[T][T][T][T][T]    Checks: (0,4)=X, (0,3)=M, (0,2)=A, (0,1)=S
+```
+
+3. **Down Check (↓)**
+```javascript
+function down(x, y) {
+    if (x + needle_len > rows) {  // Boundary check
+        return false;
+    }
+    for (let i = 0; i < needle_len; i++) {
+        if (haystack[x + i][y] !== needle[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+```
+Visual Example:
+```
+Grid Position:      For "XMAS", checking down:
+[X][T][T]          Position (0,0)
+[M][T][T]          Checks: (0,0)=X
+[A][T][T]                   (1,0)=M
+[S][T][T]                   (2,0)=A
+[T][T][T]                   (3,0)=S
+```
+
+4. **Up Check (↑)**
+```javascript
+function up(x, y) {
+    if (x - needle_len + 1 < 0) {  // Boundary check
+        return false;
+    }
+    for (let i = 0; i < needle_len; i++) {
+        if (haystack[x - i][y] !== needle[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+```
+Visual Example:
+```
+Grid Position:      For "XMAS", checking up:
+[T][T][T]          Position (3,0)
+[S][T][T]          Checks: (3,0)=X
+[A][T][T]                   (2,0)=M
+[M][T][T]                   (1,0)=A
+[X][T][T]                   (0,0)=S
+```
+
+5. **Diagonal Checks**
+```javascript
+function down_right(x, y) {
+    if (x + needle_len > rows || y + needle_len > cols) {
+        return false;
+    }
+    for (let i = 0; i < needle_len; i++) {
+        if (haystack[x + i][y + i] !== needle[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+```
+Visual Example for Down-Right (↘):
+```
+Grid Position:      For "XMAS", checking down-right:
+[X][T][T][T]       Position (0,0)
+[T][M][T][T]       Checks: (0,0)=X
+[T][T][A][T]                (1,1)=M
+[T][T][T][S]                (2,2)=A
+                            (3,3)=S
+```
+
+Key Points about Direction Checks:
+1. **Boundary Checks**
+   - Each function first verifies if the full word would fit in that direction
+   - Uses `needle_len` (4 for "XMAS") to check boundaries
+   - Prevents array index out of bounds errors
+
+2. **Character Matching**
+   - Uses a loop to check each character
+   - Index `i` is used differently in each direction:
+     - Right: adds to y (column)
+     - Left: subtracts from y
+     - Down: adds to x (row)
+     - Up: subtracts from x
+     - Diagonals: combines row and column changes
+
+3. **Early Return**
+   - Returns `false` as soon as any character doesn't match
+   - Only returns `true` if all characters match
+
+4. **Grid Navigation**
+   - `x` represents the row (vertical position)
+   - `y` represents the column (horizontal position)
+   - Each function navigates the grid differently but uses the same pattern matching logic
+
+
+</details>
+</details>
