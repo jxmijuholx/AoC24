@@ -867,6 +867,84 @@ Key Points about Direction Checks:
    - `y` represents the column (horizontal position)
    - Each function navigates the grid differently but uses the same pattern matching logic
 
+5. **Counting Matches**
+    - The main loop iterates through every position in the grid
+    - When it finds an 'X', checks all 8 directions for "XMAS"
+    - Increments counter for each successful find
+    - Returns total count of "XMAS" occurrences
 
 </details>
+<details>
+<summary>Part 2</summary>
+
+# Code
+```javascript
+const fs = require("fs");
+
+function XMAS(haystack) {
+  const rows = haystack.length;
+  const cols = haystack[0].length;
+  let count = 0;
+
+  for (i = 1; i < rows - 1; i++) {
+    for (let j = 0; j < cols; j++) {
+      if (haystack[i][j] === "A") {
+        const diagonal1 =
+          haystack[i - 1][j - 1] + haystack[i][j] + haystack[i + 1][j + 1];
+        const diagonal2 =
+          haystack[i - 1][j + 1] + haystack[i][j] + haystack[i + 1][j - 1];
+        if (
+          (diagonal1 === "MAS" || diagonal1 === "SAM") &&
+          (diagonal2 === "MAS" || diagonal2 === "SAM")
+        ) {
+          count++;
+        }
+      }
+    }
+  }
+  return count;
+}
+
+const input = fs.readFileSync("input4.txt", "utf8").trim();
+const haystack = input.split("\n").map((line) => line.split(""));
+
+console.log(XMAS(haystack));
+```
+
+# What it does
+
+This code searches for specific diagonal patterns in a grid where the letter "A" is at the center and forms either "MAS" or "SAM" in both diagonal directions simultaneously. It counts how many times this pattern occurs in the grid.
+
+## How the code works
+
+1. Read and Process Input
+- Reads the input file and converts it into a 2D array (grid)
+- Each line is split into individual characters
+
+2. Grid Search Function
+- Iterates through the grid (excluding edges for diagonal checks)
+- Looks for the letter "A" as the center point
+
+3. Pattern Checking
+- When an "A" is found, checks both diagonal directions:
+  - diagonal1: top-left to bottom-right (↘)
+  - diagonal2: top-right to bottom-left (↙)
+- Forms 3-letter strings from each diagonal
+
+4. Pattern Matching
+- Checks if both diagonals form either "MAS" or "SAM"
+- Must have valid patterns in BOTH diagonals simultaneously
+- Increments counter when both conditions are met
+
+5. Result
+- Returns the total count of valid pattern occurrences
+
+### Example Pattern:
+```
+M  M
+ A
+S  S
+```
+Where 'A' is the center and both diagonals form "MAS" or "SAM"
+
 </details>
